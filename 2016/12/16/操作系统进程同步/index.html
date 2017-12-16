@@ -1,0 +1,729 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="操作系统," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Hou++" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="背景&amp;emsp;&amp;emsp;不同线程同时对共享数据进行操作，可能会导致数据出现奇怪的结果例如：producer-consumer问题//Producerwhile(true)&amp;#123;	while(count==BUFFER_SIZE)	;	buffer[in]=nextProduced;	In=(in+1)%BUFFER_SIZE;	count++;&amp;#125;
+//Consumerwhile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统线程同步">
+<meta property="og:url" content="http://ShengtaoHou.github.io/2016/12/16/操作系统进程同步/index.html">
+<meta property="og:site_name" content="Hou++">
+<meta property="og:description" content="背景&amp;emsp;&amp;emsp;不同线程同时对共享数据进行操作，可能会导致数据出现奇怪的结果例如：producer-consumer问题//Producerwhile(true)&amp;#123;	while(count==BUFFER_SIZE)	;	buffer[in]=nextProduced;	In=(in+1)%BUFFER_SIZE;	count++;&amp;#125;
+//Consumerwhile">
+<meta property="og:updated_time" content="2016-12-17T19:11:43.168Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统线程同步">
+<meta name="twitter:description" content="背景&amp;emsp;&amp;emsp;不同线程同时对共享数据进行操作，可能会导致数据出现奇怪的结果例如：producer-consumer问题//Producerwhile(true)&amp;#123;	while(count==BUFFER_SIZE)	;	buffer[in]=nextProduced;	In=(in+1)%BUFFER_SIZE;	count++;&amp;#125;
+//Consumerwhile">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ShengtaoHou.github.io/2016/12/16/操作系统进程同步/"/>
+
+
+
+
+
+  <title> 操作系统线程同步 | Hou++ </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hou++</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Hou Shengtao's blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://ShengtaoHou.github.io/2016/12/16/操作系统进程同步/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="侯胜滔">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/photo.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Hou++">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Hou++" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                操作系统线程同步
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-16T20:52:40+08:00">
+                2016-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/线程管理/" itemprop="url" rel="index">
+                    <span itemprop="name">线程管理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+			
+			
+			<span>&nbsp; | &nbsp;
+			<span id="busuanzi_value_page_pv" ></span>次阅读
+			</span>    
+			
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>&emsp;&emsp;不同线程同时对共享数据进行操作，可能会导致数据出现奇怪的结果<br>例如：producer-consumer问题<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//Producer</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(count==BUFFER_SIZE)</span><br><span class="line">	;</span><br><span class="line">	buffer[in]=nextProduced;</span><br><span class="line">	In=(in+<span class="number">1</span>)%BUFFER_SIZE;</span><br><span class="line">	count++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//Consumer</span></span><br><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">while</span>(count==<span class="number">0</span>)</span><br><span class="line">	;</span><br><span class="line">	buffer[in]=nextProduced;</span><br><span class="line">	In=(in+<span class="number">1</span>)%BUFFER_SIZE;</span><br><span class="line">	count--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>count++与count–看起来是一步完成的，实际上是分为3部完成的，如count++在转为汇编语言时，是这样的：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">register=count；</span><br><span class="line">register=register+1；</span><br><span class="line">count=register</span><br></pre></td></tr></table></figure></p>
+<p>count–是这样的：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">register=count；</span><br><span class="line">register=register-1；</span><br><span class="line">count=register</span><br></pre></td></tr></table></figure></p>
+<p>如果同时执行count++，count–，那么这6句汇编程序将有多种排序方式，不同排列方式得到的结果不同，也就造成了一些奇怪的计算结果，解决的方法就是让count++， count–， 成为critical section，所谓的critical section，就是同一时刻，只能有一个线程执行的程序段，critical section的结构是：<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line">	entry section</span><br><span class="line">		critical section</span><br><span class="line">	<span class="built_in">exit</span> section</span><br><span class="line">	remainder section</span><br><span class="line">&#125;<span class="keyword">while</span>(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="critical-section3大条件"><a href="#critical-section3大条件" class="headerlink" title="critical section3大条件"></a>critical section3大条件</h2><p>Critical section必须满足3个条件：<br>1 彼此互斥（mutual exclusion）<br>一个线程执行critical section的时候其他线程不能执行它们自己的critical section<br>2 有序推进（progress）<br>如果没有线程在执行critical section，同时有线程希望执行critical section,那么我们就必须明确的选择一个进入，不能无限期推迟<br>3 有限等待（bounded waiting）<br>在一个线程提出进入critical section的请求和最终请求被答应的这段等待时间里，其他线程进入critical section的次数是有一个上限的，不能我一直在等，你一直进去，无限制的进去</p>
+<h2 id="peterson’s-solution"><a href="#peterson’s-solution" class="headerlink" title="peterson’s solution"></a>peterson’s solution</h2><p>是一种软件解决方案，可以解决2个线程的critical section问题<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	flag[i] = TRUE;</span><br><span class="line">	turn = j;</span><br><span class="line">	<span class="keyword">while</span> ( flag[j] &amp;&amp; turn == j); <span class="comment">// you first</span></span><br><span class="line">		CRITICAL SECTION</span><br><span class="line">	flag[i] = FALSE; <span class="comment">// exit</span></span><br><span class="line">	REMAINDER SECTION</span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	flag[j] = TRUE;</span><br><span class="line">	turn = i;</span><br><span class="line">	<span class="keyword">while</span> ( flag[i] &amp;&amp; turn == i); <span class="comment">// you first</span></span><br><span class="line">		CRITICAL SECTION</span><br><span class="line">	flag[j] = FALSE; <span class="comment">// exit</span></span><br><span class="line">	REMAINDER SECTION</span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;原理：开始的时候flag[i]和flag[j]都是true，turn等于i和j的其中一个，假设turn=i，那么Pj线程将会不断while循环，Pi则可以进入critical section，当Pi线程执行完critical section后，就会令flag[i]=false，使得Pj可以进入critical section。<br>Peterson’s solution满足了critical section的3个条件，局限是只能解决2个线程的问题，而且不能保证在现代计算机架构上运作。</p>
+<p>所有critical section问题都离不开lock<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">	Acquire lock</span><br><span class="line">		Critical section</span><br><span class="line">	Release lock</span><br><span class="line">	Remainder section</span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE)</span><br></pre></td></tr></table></figure></p>
+<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>&emsp;&emsp;在单处理器环境下，在执行critical section的时候将interrupt mask就好，等到critical section执行完毕，然后再enable interrupt，就能解决critical section问题。<br>在多处理器环境下，这样的方案行不通，因为处理器分散，信号传递消耗时间，由interrupt驱动的clock可能受到影响。<br>&emsp;&emsp;现代计算机提供了atomic hardware instruction，一个原子硬件指令是不可以中断的，用来解决critical section问题。</p>
+<h3 id="TestAndSet"><a href="#TestAndSet" class="headerlink" title="TestAndSet"></a>TestAndSet</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">boolean <span class="title">TestAndSet</span> <span class="params">(boolean *target)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	boolean rv = *target;</span><br><span class="line">	*target = TRUE;</span><br><span class="line">	return rv;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>作用是获取当前bool值，并将其修改为true</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line"><span class="keyword">while</span> ( TestAndSet (&amp;lock) )</span><br><span class="line">	; <span class="comment">// do nothing</span></span><br><span class="line">		critical section here</span><br><span class="line">	lock = FALSE;</span><br><span class="line">	remainder section here</span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;lock初始时=false,while 好比一扇门，critical section好比一个房间，lock=false的时候，门是开的，这个过程就好比：门刚开始是开的，线程进入门后，马上把门关掉，线程进入房间办事，办完后，把门打开。简单说:就是开门，关门，办事，开门的过程。</p>
+<h3 id="swap"><a href="#swap" class="headerlink" title="swap"></a>swap</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Swap</span> <span class="params">(boolean *a, boolean *b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	boolean temp = *a;</span><br><span class="line">	*a = *b;</span><br><span class="line">	*b = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决方法：<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	key = TRUE;</span><br><span class="line">	<span class="keyword">while</span> (key == TRUE) Swap ( &amp;lock, &amp;key );</span><br><span class="line">		critical section</span><br><span class="line">	lock = FALSE;</span><br><span class="line">	remainder section</span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE);</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;初始时，lock=false，只有lock=false的时候才能进门，lock是一次性用品，线程用完lock后就把lock=true，因此，其他线程就必须等待。</p>
+<p>TestAndSet, lock不能满足bounded waiting，以下方案可以满足全部3个条件<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">Boolean waiting[n], lock;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	waiting[i] = TRUE; <span class="comment">// wish to acquire the lock</span></span><br><span class="line">	key = TRUE;</span><br><span class="line">	<span class="keyword">while</span> (waiting[i] &amp;&amp; key) key = TestandSet(&amp;lock); <span class="comment">// try to acquire the lock</span></span><br><span class="line">	waiting[i] = FALSE;</span><br><span class="line">	<span class="comment">// ……critical section here…. //</span></span><br><span class="line">	j = (i+<span class="number">1</span>)%n;</span><br><span class="line">	<span class="keyword">while</span> ( (j!= i) &amp;&amp; !waiting[j] ) j = (j+<span class="number">1</span>)%n; <span class="comment">// keep locked and allow the next to come in</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> ( j == i ) lock = FALSE;</span><br><span class="line">	<span class="keyword">else</span> waiting[j] = FALSE;</span><br><span class="line">	<span class="comment">// ……remainder section here…. //</span></span><br><span class="line">&#125; <span class="keyword">while</span> (TRUE);</span><br></pre></td></tr></table></figure></p>
+<h2 id="semaphore"><a href="#semaphore" class="headerlink" title="semaphore"></a>semaphore</h2><p>&emsp;&emsp;有2种semaphore，一种是counting semaphore，一种是binary semaphore（mutex locks）<br>semaphore不一定要busy waiting，<br>使用busy waiting的semaphore：<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">wait (S) &#123;</span><br><span class="line"><span class="keyword">while</span> S &lt;= <span class="number">0</span> <span class="comment">// atomic for each iteration</span></span><br><span class="line">; <span class="comment">// no-op // iteration: if S&gt;0, S--; else, no-op and test again</span></span><br><span class="line">S--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">signal (S) &#123;</span><br><span class="line">S++; <span class="comment">// atomic</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>不使用busy waiting的semaphore：<br><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">wait (S)&#123;</span><br><span class="line">value--;</span><br><span class="line"><span class="keyword">if</span> (value &lt; <span class="number">0</span>) &#123; <span class="comment">// the value can be negative  # of processes waiting</span></span><br><span class="line"><span class="function">add <span class="keyword">this</span> process to the waiting <span class="built_in">queue</span></span><br><span class="line"><span class="title">block</span><span class="params">()</span></span>; <span class="comment">/* suspend the process */</span> &#125;</span><br><span class="line">&#125; </span><br><span class="line">Signal (S)&#123;</span><br><span class="line">value++;</span><br><span class="line"><span class="keyword">if</span> (value &lt;= <span class="number">0</span>) &#123;</span><br><span class="line"><span class="function">remove a process P from the waiting <span class="built_in">queue</span></span><br><span class="line"><span class="title">wakeup</span><span class="params">(P)</span></span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;等待的线程采用FIFO policy放入PCB中，采用spinlock来确保wait和signal是原子性的，但是不能完全消去busy waiting，</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/15/浅谈操作系统虚拟内存/" rel="next" title="浅谈操作系统虚拟内存">
+                <i class="fa fa-chevron-left"></i> 浅谈操作系统虚拟内存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/18/Deadlock/" rel="prev" title="Deadlock">
+                Deadlock <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/photo.jpg"
+               alt="侯胜滔" />
+          <p class="site-author-name" itemprop="name">侯胜滔</p>
+          <p class="site-description motion-element" itemprop="description">喜欢每天都在进步的状态</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/profile.php?id=100011226155573" target="_blank" title="facebook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/shengtao_hou" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#critical-section3大条件"><span class="nav-number">2.</span> <span class="nav-text">critical section3大条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#peterson’s-solution"><span class="nav-number">3.</span> <span class="nav-text">peterson’s solution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">4.</span> <span class="nav-text">硬件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TestAndSet"><span class="nav-number">4.1.</span> <span class="nav-text">TestAndSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap"><span class="nav-number">4.2.</span> <span class="nav-text">swap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#semaphore"><span class="nav-number">5.</span> <span class="nav-text">semaphore</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+	  <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯胜滔</span>
+</div>
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本站总访问量 <span id="busuanzi_value_site_pv"></span> &nbsp&nbsp&nbsp
+您是第<span id="busuanzi_value_site_uv"></span>个来到的小伙伴
+
+
+
+         
+
+        
+      </div>
+	  
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

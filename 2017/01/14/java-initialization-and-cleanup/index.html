@@ -1,0 +1,690 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="5.1构造器&amp;emsp;&amp;emsp;忘记初始化会导致bug，忘记清除会导致被占用的资源得不到释放，内存被耗尽。&amp;emsp;&amp;emsp;java的构造器和类名同名，可以自定义构造器， 5.2方法重载&amp;emsp;&amp;emsp;一个构造函数或者函数，参数类型不同，参数顺序不同都会导致方法的重载。&amp;emsp;&amp;emsp;如果传入参数类型小于定义参数类型，会导致传入类型提升，顺序为：char,byte,sho">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java initialization and cleanup">
+<meta property="og:url" content="http://ShengtaoHou.github.io/2017/01/14/java-initialization-and-cleanup/index.html">
+<meta property="og:site_name" content="Hou++">
+<meta property="og:description" content="5.1构造器&amp;emsp;&amp;emsp;忘记初始化会导致bug，忘记清除会导致被占用的资源得不到释放，内存被耗尽。&amp;emsp;&amp;emsp;java的构造器和类名同名，可以自定义构造器， 5.2方法重载&amp;emsp;&amp;emsp;一个构造函数或者函数，参数类型不同，参数顺序不同都会导致方法的重载。&amp;emsp;&amp;emsp;如果传入参数类型小于定义参数类型，会导致传入类型提升，顺序为：char,byte,sho">
+<meta property="og:updated_time" content="2017-01-16T07:24:36.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java initialization and cleanup">
+<meta name="twitter:description" content="5.1构造器&amp;emsp;&amp;emsp;忘记初始化会导致bug，忘记清除会导致被占用的资源得不到释放，内存被耗尽。&amp;emsp;&amp;emsp;java的构造器和类名同名，可以自定义构造器， 5.2方法重载&amp;emsp;&amp;emsp;一个构造函数或者函数，参数类型不同，参数顺序不同都会导致方法的重载。&amp;emsp;&amp;emsp;如果传入参数类型小于定义参数类型，会导致传入类型提升，顺序为：char,byte,sho">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ShengtaoHou.github.io/2017/01/14/java-initialization-and-cleanup/"/>
+
+
+
+
+
+  <title> java initialization and cleanup | Hou++ </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hou++</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Hou Shengtao's blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://ShengtaoHou.github.io/2017/01/14/java-initialization-and-cleanup/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="侯胜滔">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/photo.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Hou++">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Hou++" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java initialization and cleanup
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-14T20:02:54+08:00">
+                2017-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+			
+			
+			<span>&nbsp; | &nbsp;
+			<span id="busuanzi_value_page_pv" ></span>次阅读
+			</span>    
+			
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="5-1构造器"><a href="#5-1构造器" class="headerlink" title="5.1构造器"></a>5.1构造器</h2><p>&emsp;&emsp;忘记初始化会导致bug，忘记清除会导致被占用的资源得不到释放，内存被耗尽。<br>&emsp;&emsp;java的构造器和类名同名，可以自定义构造器，</p>
+<h2 id="5-2方法重载"><a href="#5-2方法重载" class="headerlink" title="5.2方法重载"></a>5.2方法重载</h2><p>&emsp;&emsp;一个构造函数或者函数，参数类型不同，参数顺序不同都会导致方法的重载。<br>&emsp;&emsp;如果传入参数类型小于定义参数类型，会导致传入类型提升，顺序为：char,byte,short,int,long,float,double,需要注意的是：不存在char定义类型且存在int定义类型时，会提升至int，无int定义类型会提升至long，float，double。<br>&emsp;&emsp;如果传入参数类型大于定义参数类型，会进行类型转换，窄化范围：double，float，long，int，short，byte，char。<br>&emsp;&emsp;根据返回值来重载方法是行不通的，除非这样：int x=f()；明确声明了返回值。</p>
+<h2 id="5-3默认构造器"><a href="#5-3默认构造器" class="headerlink" title="5.3默认构造器"></a>5.3默认构造器</h2><p>&emsp;&emsp;默认构造器没有参数，在new一个对象的时候会自动创建默认构造器，例如：Bird b=new Bird();但是，如果明确的定义构造器，编译器就不会帮你生动生成默认构造器，如果没有明确定义默认构造器，就会报错。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>()</span>&#123;</div><div class="line">	Bird(<span class="keyword">int</span> i)&#123;&#125;</div><div class="line">	Bird(<span class="keyword">double</span> i)&#123;&#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args)</span></span>&#123;</div><div class="line">		Bird b=<span class="keyword">new</span> Bird();<span class="comment">//error</span></div><div class="line">		Bird b=<span class="keyword">new</span> Bird(<span class="number">1.0</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="5-4-this关键字"><a href="#5-4-this关键字" class="headerlink" title="5.4 this关键字"></a>5.4 this关键字</h2><p>看一段程序：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/BananaPeel.java</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Banana</span> </span>&#123; <span class="function"><span class="keyword">void</span> <span class="title">peel</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123; <span class="comment">/* ... */</span> &#125; &#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BananaPeel</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">Banana a = <span class="keyword">new</span> Banana(),</div><div class="line">b = <span class="keyword">new</span> Banana();</div><div class="line">a.peel(<span class="number">1</span>);</div><div class="line">b.peel(<span class="number">2</span>);</div><div class="line">&#125;</div><div class="line">&#125; <span class="comment">///:~</span></div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;peel函数被调用的时候，怎么知道它是peel a还是b呢？实际上，peel函数在调用的时候，会把对象也当做参数。实际上是这样的：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Banana.peel(a, <span class="number">1</span>);</div><div class="line">Banana.peel(b, <span class="number">2</span>);</div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如果你想在一个方法中表示当前的对象，可以使用this关键字，static 方法不能使用this。如果一个class里的方法调用另一个class的方法，可以省略this 关键词。this keyword经常用在return 中，表示返回当前对象：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/Leaf.java</span></div><div class="line"><span class="comment">// Simple use of the "this" keyword.</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Leaf</span> </span>&#123;</div><div class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line"><span class="function">Leaf <span class="title">increment</span><span class="params">()</span> </span>&#123;</div><div class="line">i++;</div><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</div><div class="line">System.out.println(<span class="string">"i = "</span> + i);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">Leaf x = <span class="keyword">new</span> Leaf();</div><div class="line">x.increment().increment().increment().print();</div><div class="line">&#125;</div><div class="line">&#125; <span class="comment">/* Output:</span></div><div class="line">i = 3</div><div class="line">*/<span class="comment">//:~</span></div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;每次increment方法调用后都返回当前的obejct。<br>&emsp;&emsp;The this keyword is also useful for passing the current object to another method as its argument:<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/PassingThis.java</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">(Apple apple)</span> </span>&#123;</div><div class="line">Apple peeled = apple.getPeeled();</div><div class="line">System.out.println(<span class="string">"Yummy"</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Peeler</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">static</span> Apple <span class="title">peel</span><span class="params">(Apple apple)</span> </span>&#123;</div><div class="line"><span class="comment">// ... remove peel</span></div><div class="line"><span class="keyword">return</span> apple; <span class="comment">// Peeled</span></div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Apple</span> </span>&#123;</div><div class="line"><span class="function">Apple <span class="title">getPeeled</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> Peeler.peel(<span class="keyword">this</span>); &#125; <span class="comment">//here</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PassingThis</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"><span class="keyword">new</span> Person().eat(<span class="keyword">new</span> Apple());</div><div class="line">&#125;</div><div class="line">&#125; </div><div class="line"><span class="comment">/* Output:</span></div><div class="line">Yummy</div><div class="line">*/<span class="comment">//:~</span></div></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;java缺什么就new什么，c吃苹果是自己动手削苹果，java是让苹果自己削自己。</p>
+<h3 id="Calling-constructors-from-constructors"><a href="#Calling-constructors-from-constructors" class="headerlink" title="Calling constructors from constructors"></a>Calling constructors from constructors</h3><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/Flower.java</span></div><div class="line"><span class="comment">// Calling constructors with "this"</span></div><div class="line"><span class="keyword">import</span> <span class="keyword">static</span> net.mindview.util.Print.*;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Flower</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> petalCount = <span class="number">0</span>;</div><div class="line">	String s = <span class="string">"initial value"</span>;</div><div class="line">	Flower(<span class="keyword">int</span> petals) &#123;</div><div class="line">		petalCount = petals;</div><div class="line">		print(<span class="string">"Constructor w/ int arg only, petalCount= "</span></div><div class="line">		+ petalCount);</div><div class="line">&#125;</div><div class="line">	Flower(String ss) &#123;</div><div class="line">		print(<span class="string">"Constructor w/ String arg only, s = "</span> + ss);</div><div class="line">		s = ss;</div><div class="line">	&#125;</div><div class="line">	Flower(String s, <span class="keyword">int</span> petals) &#123;</div><div class="line">		<span class="keyword">this</span>(petals);</div><div class="line">		<span class="comment">//! this(s); // Can’t call two!</span></div><div class="line">		<span class="keyword">this</span>.s = s; <span class="comment">// Another use of "this"</span></div><div class="line">		print(<span class="string">"String &amp; int args"</span>);</div><div class="line">	&#125;</div><div class="line">	Flower() &#123;</div><div class="line">		<span class="keyword">this</span>(<span class="string">"hi"</span>, <span class="number">47</span>);</div><div class="line">		print(<span class="string">"default constructor (no args)"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">printPetalCount</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">//! this(11); // Not inside non-constructor!</span></div><div class="line">		print(<span class="string">"petalCount = "</span> + petalCount + <span class="string">" s = "</span>+ s);</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Flower x = <span class="keyword">new</span> Flower();</div><div class="line">		x.printPetalCount();</div><div class="line">	&#125;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/* Output:</span></div><div class="line">Constructor w/ int arg only, petalCount= 47</div><div class="line">String &amp; int args</div><div class="line">default constructor (no args)</div><div class="line">petalCount = 47 s = hi</div><div class="line">*/<span class="comment">//:~</span></div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;while you can call one constructor using this, you cannot call two. In addition, the constructor call must be the first thing you do, or you’ll get a compiler error message.<br>&emsp;&emsp;using this.s, to say that you’re referring to the member data.<br>&emsp;&emsp;the compiler won’t let you call a constructor from inside any method other than a constructor.</p>
+<h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><h2 id="5-5-终结处理和垃圾回收器"><a href="#5-5-终结处理和垃圾回收器" class="headerlink" title="5.5 终结处理和垃圾回收器"></a>5.5 终结处理和垃圾回收器</h2><p>&emsp;&emsp;garbage collector 只会release那些由new分配的memory。<br>&emsp;&emsp;finalize( )在cleanup发生之前做一些操作,好比死前说几句遗言。finalize很少用。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/TerminationCondition.java</span></div><div class="line"><span class="comment">// Using finalize() to detect an object that</span></div><div class="line"><span class="comment">// hasn’t been properly cleaned up.</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</div><div class="line"><span class="keyword">boolean</span> checkedOut = <span class="keyword">false</span>;</div><div class="line">Book(<span class="keyword">boolean</span> checkOut) &#123;</div><div class="line">checkedOut = checkOut;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">checkIn</span><span class="params">()</span> </span>&#123;</div><div class="line">checkedOut = <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="keyword">if</span>(checkedOut)</div><div class="line">System.out.println(<span class="string">"Error: checked out"</span>);</div><div class="line"><span class="comment">// Normally, you’ll also do this:</span></div><div class="line"><span class="comment">// super.finalize(); // Call the base-class version</span></div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TerminationCondition</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">Book novel = <span class="keyword">new</span> Book(<span class="keyword">true</span>);</div><div class="line"><span class="comment">// Proper cleanup:</span></div><div class="line">novel.checkIn();</div><div class="line"><span class="comment">// Drop the reference, forget to clean up:</span></div><div class="line"><span class="keyword">new</span> Book(<span class="keyword">true</span>);</div><div class="line"><span class="comment">// Force garbage collection &amp; finalization:</span></div><div class="line">System.gc();</div><div class="line">&#125;</div><div class="line">&#125; <span class="comment">/* Output:</span></div><div class="line">Error: checked out</div><div class="line">*/<span class="comment">//:~</span></div></pre></td></tr></table></figure></p>
+<h3 id="垃圾回收器原理："><a href="#垃圾回收器原理：" class="headerlink" title="垃圾回收器原理："></a>垃圾回收器原理：</h3><h2 id="5-6-成员初始化"><a href="#5-6-成员初始化" class="headerlink" title="5.6 成员初始化"></a>5.6 成员初始化</h2><p>&emsp;&emsp;即使是基本数据类型也要初始化，未初始化就使用会报错，尽管未初始化的变量也会有默认值。<br>&emsp;&emsp;指定初始化，在定义的时候赋初值。</p>
+<h2 id="5-7-构造器初始化"><a href="#5-7-构造器初始化" class="headerlink" title="5.7 构造器初始化"></a>5.7 构造器初始化</h2><p>initialization是在所有的method之前，包括在construct之前：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//: initialization/OrderOfInitialization.java</span></div><div class="line"><span class="comment">// Demonstrates initialization order.</span></div><div class="line"><span class="keyword">import</span> <span class="keyword">static</span> net.mindview.util.Print.*;</div><div class="line"><span class="comment">// When the constructor is called to create a</span></div><div class="line"><span class="comment">// Window object, you’ll see a message:</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Window</span> </span>&#123;</div><div class="line">Window(<span class="keyword">int</span> marker) &#123; print(<span class="string">"Window("</span> + marker + <span class="string">")"</span>); &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">House</span> </span>&#123;</div><div class="line">Window w1 = <span class="keyword">new</span> Window(<span class="number">1</span>); <span class="comment">// Before constructor</span></div><div class="line">House() &#123;</div><div class="line"><span class="comment">// Show that we’re in the constructor:</span></div><div class="line">print(<span class="string">"House()"</span>);</div><div class="line">w3 = <span class="keyword">new</span> Window(<span class="number">33</span>); <span class="comment">// Reinitialize w3</span></div><div class="line">&#125;</div><div class="line">Window w2 = <span class="keyword">new</span> Window(<span class="number">2</span>); <span class="comment">// After constructor</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; print(<span class="string">"f()"</span>); &#125;</div><div class="line">Window w3 = <span class="keyword">new</span> Window(<span class="number">3</span>); <span class="comment">// At end</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderOfInitialization</span> </span>&#123;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">House h = <span class="keyword">new</span> House();</div><div class="line">h.f(); <span class="comment">// Shows that construction is done</span></div><div class="line">&#125;</div><div class="line">&#125; <span class="comment">/* Output:</span></div><div class="line">Window(1)</div><div class="line">Window(2)</div><div class="line">Window(3)</div><div class="line">House()</div><div class="line">Window(33)</div><div class="line">f()</div><div class="line">*/<span class="comment">//:~</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/14/java/" rel="next" title="java入门">
+                <i class="fa fa-chevron-left"></i> java入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/16/访问权限控制/" rel="prev" title="访问权限控制">
+                访问权限控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/photo.jpg"
+               alt="侯胜滔" />
+          <p class="site-author-name" itemprop="name">侯胜滔</p>
+          <p class="site-description motion-element" itemprop="description">务实，高效，</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/profile.php?id=100011226155573" target="_blank" title="facebook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/shengtao_hou" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1构造器"><span class="nav-number">1.</span> <span class="nav-text">5.1构造器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2方法重载"><span class="nav-number">2.</span> <span class="nav-text">5.2方法重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3默认构造器"><span class="nav-number">3.</span> <span class="nav-text">5.3默认构造器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-this关键字"><span class="nav-number">4.</span> <span class="nav-text">5.4 this关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Calling-constructors-from-constructors"><span class="nav-number">4.1.</span> <span class="nav-text">Calling constructors from constructors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static"><span class="nav-number">4.2.</span> <span class="nav-text">static</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-终结处理和垃圾回收器"><span class="nav-number">5.</span> <span class="nav-text">5.5 终结处理和垃圾回收器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收器原理："><span class="nav-number">5.1.</span> <span class="nav-text">垃圾回收器原理：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-成员初始化"><span class="nav-number">6.</span> <span class="nav-text">5.6 成员初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-构造器初始化"><span class="nav-number">7.</span> <span class="nav-text">5.7 构造器初始化</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+	  <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯胜滔</span>
+</div>
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本站总访问量 <span id="busuanzi_value_site_pv"></span> &nbsp&nbsp&nbsp
+您是第<span id="busuanzi_value_site_uv"></span>个来到的小伙伴
+
+
+
+         
+
+        
+      </div>
+	  
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
