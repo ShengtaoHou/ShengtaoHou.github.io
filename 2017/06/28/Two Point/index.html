@@ -1,0 +1,806 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Alogrithm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="双指针问题，常常和数组联系起来，问题的解与数组中两个元素的位置密切相关，解决方法是设置左右指针，或者两个左指针，该问题的难点在于，两个指针，该移动哪个，什么情况下移动左指针，什么情况下移动右指针， N Sum001 Two SumGiven an array of integers, return indices of the two numbers such that they add up t">
+<meta name="keywords" content="Alogrithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Two Point Problem">
+<meta property="og:url" content="http://ShengtaoHou.github.io/2017/06/28/Two Point/index.html">
+<meta property="og:site_name" content="侯胜滔的博客">
+<meta property="og:description" content="双指针问题，常常和数组联系起来，问题的解与数组中两个元素的位置密切相关，解决方法是设置左右指针，或者两个左指针，该问题的难点在于，两个指针，该移动哪个，什么情况下移动左指针，什么情况下移动右指针， N Sum001 Two SumGiven an array of integers, return indices of the two numbers such that they add up t">
+<meta property="og:image" content="http://www.leetcode.com/static/images/problemset/rainwatertrap.png">
+<meta property="og:updated_time" content="2018-09-05T20:54:04.839Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Two Point Problem">
+<meta name="twitter:description" content="双指针问题，常常和数组联系起来，问题的解与数组中两个元素的位置密切相关，解决方法是设置左右指针，或者两个左指针，该问题的难点在于，两个指针，该移动哪个，什么情况下移动左指针，什么情况下移动右指针， N Sum001 Two SumGiven an array of integers, return indices of the two numbers such that they add up t">
+<meta name="twitter:image" content="http://www.leetcode.com/static/images/problemset/rainwatertrap.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://ShengtaoHou.github.io/2017/06/28/Two Point/"/>
+
+
+
+
+
+  <title> Two Point Problem | 侯胜滔的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">侯胜滔的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Hou Shengtao's blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://ShengtaoHou.github.io/2017/06/28/Two Point/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="侯胜滔">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/photo.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="侯胜滔的博客">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="侯胜滔的博客" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Two Point Problem
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-28T16:45:00-07:00">
+                2017-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Alogrithm/" itemprop="url" rel="index">
+                    <span itemprop="name">Alogrithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+			
+			
+			<span>&nbsp; | &nbsp;
+			<span id="busuanzi_value_page_pv" ></span>次阅读
+			</span>    
+			
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>双指针问题，常常和数组联系起来，问题的解与数组中两个元素的位置密切相关，解决方法是设置左右指针，或者两个左指针，该问题的难点在于，两个指针，该移动哪个，什么情况下移动左指针，什么情况下移动右指针，</p>
+<h1 id="N-Sum"><a href="#N-Sum" class="headerlink" title="N Sum"></a>N Sum</h1><h2 id="001-Two-Sum"><a href="#001-Two-Sum" class="headerlink" title="001 Two Sum"></a>001 Two Sum</h2><p>Given an array of integers, return <strong>indices</strong> of the two numbers such that they add up to a specific target.</p>
+<p>You may assume that each input would have <strong>exactly</strong> one solution, and you may not use the <em>same</em> element twice.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Given nums = [2, 7, 11, 15], target = 9,</div><div class="line"></div><div class="line">Because nums[0] + nums[1] = 2 + 7 = 9,</div><div class="line">return [0, 1].</div></pre></td></tr></table></figure>
+<p>暴力解，双重循环，列举所有可能，时间复杂度n2</p>
+<p>采用heap，时间复杂度n</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</div><div class="line">    <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</div><div class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numbers.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (map.containsKey(target - numbers[i])) &#123;</div><div class="line">            result[<span class="number">1</span>] = i + <span class="number">1</span>;</div><div class="line">            result[<span class="number">0</span>] = map.get(target - numbers[i]);</div><div class="line">            <span class="keyword">return</span> result;</div><div class="line">        &#125;</div><div class="line">        map.put(numbers[i], i + <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="167-Two-Sum-II-sorted"><a href="#167-Two-Sum-II-sorted" class="headerlink" title="167 Two Sum II - sorted"></a>167 Two Sum II - sorted</h2><p>Given an array of integers that is already <strong>sorted in ascending order</strong>, find two numbers such that they add up to a specific target number.</p>
+<p>The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2.</p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>Your returned answers (both index1 and index2) are not zero-based.</li>
+<li>You may assume that each input would have <em>exactly</em> one solution and you may not use the <em>same</em> element twice.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: numbers = [2,7,11,15], target = 9</div><div class="line">Output: [1,2]</div><div class="line">Explanation: The sum of 2 and 7 is 9. Therefore index1 = 1, index2 = 2.</div></pre></td></tr></table></figure>
+<p>假如可以排序，则可以使用双指针的思想，</p>
+<p>左右和等于target，返回</p>
+<p>左右和大于target，j–</p>
+<p>左右和小于target，i++</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] num, <span class="keyword">int</span> target) &#123;</div><div class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</div><div class="line">    <span class="keyword">if</span> (num == <span class="keyword">null</span> || num.length &lt; <span class="number">2</span>) <span class="keyword">return</span> res;</div><div class="line">    <span class="keyword">int</span> left = <span class="number">0</span>, right = num.length - <span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span> (left &lt; right) &#123;</div><div class="line">        <span class="keyword">int</span> sum = num[left] + num[right];</div><div class="line">        <span class="keyword">if</span> (sum == target) &#123;</div><div class="line">            res[<span class="number">0</span>] = left + <span class="number">1</span>;</div><div class="line">            res[<span class="number">1</span>] = right + <span class="number">1</span>;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sum &gt; target) &#123;</div><div class="line">            right --;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            left ++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="015-3Sum"><a href="#015-3Sum" class="headerlink" title="015 3Sum"></a>015 3Sum</h2><p>Given an array <code>nums</code> of <em>n</em> integers, are there elements <em>a</em>, <em>b</em>, <em>c</em> in <code>nums</code> such that <em>a</em> + <em>b</em> + <em>c</em> = 0? Find all unique triplets in the array which gives the sum of zero.</p>
+<p><strong>Note:</strong></p>
+<p>The solution set must not contain duplicate triplets.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Given array nums = [-1, 0, 1, 2, -1, -4],</div><div class="line"></div><div class="line">A solution set is:</div><div class="line">[</div><div class="line">  [-1, 0, 1],</div><div class="line">  [-1, -1, 2]</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>3sum里面用到了2sum的程序，需要注意的是，该题要求返回的数组不可重复，所以就进行繁琐的去重，或者直接用set存储，最终再转为array，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; threeSum(<span class="keyword">int</span>[] nums) &#123;</div><div class="line">    List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    Arrays.sort(nums);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i + <span class="number">2</span> &lt; nums.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp; nums[i] == nums[i - <span class="number">1</span>]) &#123;              <span class="comment">// skip same result</span></div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> j = i + <span class="number">1</span>, k = nums.length - <span class="number">1</span>;  </div><div class="line">        <span class="keyword">int</span> target = -nums[i];</div><div class="line">        <span class="keyword">while</span> (j &lt; k) &#123;</div><div class="line">            <span class="keyword">if</span> (nums[j] + nums[k] == target) &#123;</div><div class="line">                res.add(Arrays.asList(nums[i], nums[j], nums[k]));</div><div class="line">                j++;</div><div class="line">                k--;</div><div class="line">                <span class="keyword">while</span> (j &lt; k &amp;&amp; nums[j] == nums[j - <span class="number">1</span>]) j++;  <span class="comment">// skip same result</span></div><div class="line">                <span class="keyword">while</span> (j &lt; k &amp;&amp; nums[k] == nums[k + <span class="number">1</span>]) k--;  <span class="comment">// skip same result</span></div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nums[j] + nums[k] &gt; target) &#123;</div><div class="line">                k--;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                j++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="左右指针问题"><a href="#左右指针问题" class="headerlink" title="左右指针问题"></a>左右指针问题</h1><h2 id="011-Container-With-Most-Water"><a href="#011-Container-With-Most-Water" class="headerlink" title="011 Container With Most Water"></a>011 Container With Most Water</h2><p>Given <em>n</em> non-negative integers <em>a1</em>, <em>a2</em>, …, <em>an</em> , where each represents a point at coordinate (<em>i</em>, <em>ai</em>). <em>n</em> vertical lines are drawn such that the two endpoints of line <em>i</em> is at (<em>i</em>, <em>ai</em>) and (<em>i</em>, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.</p>
+<p><strong>Note:</strong> You may not slant the container and <em>n</em> is at least 2.</p>
+<p>这道题用到了双指针，和贪心算法的思想，假设目前的指针是i和j，i的高度低于j，那么接下来有两种情况，移动i，或者移动j</p>
+<p>移动j，假如j-1更高，因为要以i为准，所以sum减少，j-1更低，sum减少</p>
+<p>移动i，假如i+1大于i的高度，那么sum有可能增加，</p>
+<p>因此，始终移动矮的指针</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> res=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right=height.length-<span class="number">1</span>;</div><div class="line">    <span class="keyword">while</span>(left&lt;right)&#123;</div><div class="line">        res=Math.max(res,Math.min(height[left],height[right])*(right-left));</div><div class="line">        <span class="keyword">if</span>(height[left]&lt;height[right])&#123;</div><div class="line">            left++;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            right--;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="042-Trapping-Rain-Water"><a href="#042-Trapping-Rain-Water" class="headerlink" title="042 Trapping Rain Water"></a>042 Trapping Rain Water</h2><p>Given <em>n</em> non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.</p>
+<p><img src="http://www.leetcode.com/static/images/problemset/rainwatertrap.png" alt="img"><br>The above elevation map is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped. <strong>Thanks Marcos</strong> for contributing this image!</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: [0,1,0,2,1,0,1,3,2,1,2,1]</div><div class="line">Output: 6</div></pre></td></tr></table></figure>
+<p>思路和上一题一样，始终移动矮的指针，假如i是矮的指针，i右边所有低于它的节点都会装满水，所有高于它的节点都不会装水，遇到高的节点，就更新高度</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> res=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right=height.length-<span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> leftmax=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> rightmax=<span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(left&lt;right)&#123;</div><div class="line">        <span class="keyword">if</span>(height[left]&lt;height[right])&#123;</div><div class="line">            leftmax=Math.max(leftmax,height[left]);</div><div class="line">            res+=(leftmax-height[left]);</div><div class="line">            left++;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            rightmax=Math.max(rightmax,height[right]);</div><div class="line">            res+=(rightmax-height[right]);</div><div class="line">            right--;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="链表双指针"><a href="#链表双指针" class="headerlink" title="链表双指针"></a>链表双指针</h1><p>链表常用双指针，fast，slow，</p>
+<h2 id="019-Remove-Nth-Node-From-End-of-List"><a href="#019-Remove-Nth-Node-From-End-of-List" class="headerlink" title="019 Remove Nth Node From End of List"></a>019 Remove Nth Node From End of List</h2><p>Given a linked list, remove the <em>n</em>-th node from the end of list and return its head.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Given linked list: 1-&gt;2-&gt;3-&gt;4-&gt;5, and n = 2.</div><div class="line"></div><div class="line">After removing the second node from the end, the linked list becomes 1-&gt;2-&gt;3-&gt;5.</div></pre></td></tr></table></figure>
+<p><strong>Note:</strong></p>
+<p>Given <em>n</em> will always be valid.</p>
+<p><strong>Follow up:</strong></p>
+<p>Could you do this in one pass?</p>
+<p>fast指针先移动n步，再同时移动fast，slow指针,</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">removeNthFromEnd</span><span class="params">(ListNode head, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    ListNode start = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">    ListNode slow = start, fast = start;</div><div class="line">    slow.next = head;</div><div class="line"></div><div class="line">    <span class="comment">//Move fast in front so that the gap between slow and fast becomes n</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=n+<span class="number">1</span>; i++)   &#123;</div><div class="line">        fast = fast.next;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//Move fast to the end, maintaining the gap</span></div><div class="line">    <span class="keyword">while</span>(fast != <span class="keyword">null</span>) &#123;</div><div class="line">        slow = slow.next;</div><div class="line">        fast = fast.next;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//Skip the desired node</span></div><div class="line">    slow.next = slow.next.next;</div><div class="line">    <span class="keyword">return</span> start.next;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="061-Rotate-List"><a href="#061-Rotate-List" class="headerlink" title="061 Rotate List"></a>061 Rotate List</h2><p>Given a linked list, rotate the list to the right by <em>k</em> places, where <em>k</em> is non-negative.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL, k = 2</div><div class="line">Output: 4-&gt;5-&gt;1-&gt;2-&gt;3-&gt;NULL</div><div class="line">Explanation:</div><div class="line">rotate 1 steps to the right: 5-&gt;1-&gt;2-&gt;3-&gt;4-&gt;NULL</div><div class="line">rotate 2 steps to the right: 4-&gt;5-&gt;1-&gt;2-&gt;3-&gt;NULL</div></pre></td></tr></table></figure>
+<p>数长度，slow指向头结点前一个节点，fast指向尾节点，拼接</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">rotateRight</span><span class="params">(ListNode head, <span class="keyword">int</span> n)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (head==<span class="keyword">null</span>||head.next==<span class="keyword">null</span>) <span class="keyword">return</span> head;</div><div class="line">    ListNode dummy=<span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">    dummy.next=head;</div><div class="line">    ListNode fast=dummy,slow=dummy;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    <span class="keyword">for</span> (i=<span class="number">0</span>;fast.next!=<span class="keyword">null</span>;i++)<span class="comment">//Get the total length </span></div><div class="line">    	fast=fast.next;</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=i-n%i;j&gt;<span class="number">0</span>;j--) <span class="comment">//Get the i-n%i th node</span></div><div class="line">    	slow=slow.next;</div><div class="line">    </div><div class="line">    fast.next=dummy.next; <span class="comment">//Do the rotation</span></div><div class="line">    dummy.next=slow.next;</div><div class="line">    slow.next=<span class="keyword">null</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> dummy.next;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="杂"><a href="#杂" class="headerlink" title="杂"></a>杂</h1><h2 id="075-Sort-Colors"><a href="#075-Sort-Colors" class="headerlink" title="075 Sort Colors"></a>075 Sort Colors</h2><p>Given an array with <em>n</em> objects colored red, white or blue, sort them <strong>in-place</strong> so that objects of the same color are adjacent, with the colors in the order red, white and blue.</p>
+<p>Here, we will use the integers 0, 1, and 2 to represent the color red, white, and blue respectively.</p>
+<p><strong>Note:</strong> You are not suppose to use the library’s sort function for this problem.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: [2,0,2,1,1,0]</div><div class="line">Output: [0,0,1,1,2,2]</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sortColors</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> p1 = <span class="number">0</span>, p2 = nums.length - <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= p2;) &#123;</div><div class="line">        <span class="keyword">if</span>(nums[i]==<span class="number">0</span>)&#123;</div><div class="line">            nums[i]=nums[p1];  <span class="comment">//nums[p1] 一定是1</span></div><div class="line">            nums[p1]=<span class="number">0</span>;</div><div class="line">            i++;</div><div class="line">            p1++;</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(nums[i]==<span class="number">2</span>)&#123;</div><div class="line">            nums[i]=nums[p2];</div><div class="line">            nums[p2]=<span class="number">2</span>;</div><div class="line">            p2--;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            i++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="524-Longest-Word-in-Dictionary-through-Deleting"><a href="#524-Longest-Word-in-Dictionary-through-Deleting" class="headerlink" title="524 Longest Word in Dictionary through Deleting"></a>524 Longest Word in Dictionary through Deleting</h2><p>Given a string and a string dictionary, find the longest string in the dictionary that can be formed by deleting some characters of the given string. If there are more than one possible results, return the longest word with the smallest lexicographical order. If there is no possible result, return the empty string.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Input:</div><div class="line">s = <span class="string">"abpcplea"</span>, d = [<span class="string">"ale"</span>,<span class="string">"apple"</span>,<span class="string">"monkey"</span>,<span class="string">"plea"</span>]</div><div class="line"></div><div class="line">Output: </div><div class="line"><span class="string">"apple"</span></div></pre></td></tr></table></figure>
+<p>先给字典排序，再依次比较字典字和目标串，有点暴力，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">findLongestWord</span><span class="params">(String s, List&lt;String&gt; d)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (s.length() == <span class="number">0</span> || d.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">         Collections.sort(d, (a, b) -&gt; &#123;</div><div class="line">       <span class="keyword">if</span> (a.length() != b.length()) <span class="keyword">return</span> b.length() - a.length();</div><div class="line">       <span class="keyword">return</span> a.compareTo(b);</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (String p : d) &#123;</div><div class="line">        <span class="keyword">if</span> (s.length() &lt; p.length()) <span class="keyword">continue</span>;</div><div class="line">        <span class="keyword">if</span> (isSubSeq(s, p)) <span class="keyword">return</span> p;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isSubSeq</span><span class="params">(String s, String p)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (i &lt; s.length() &amp;&amp; j &lt; p.length()) &#123;</div><div class="line">        <span class="keyword">if</span> (s.charAt(i) == p.charAt(j)) &#123;</div><div class="line">            i++; j++;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            i++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> j == p.length();</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="双左指针求最小子串问题"><a href="#双左指针求最小子串问题" class="headerlink" title="双左指针求最小子串问题"></a>双左指针求最小子串问题</h1><p>求最小子数组，子串问题，</p>
+<p>移动右指针，先找到第一个符合条件的子串，记录长度，然后移动左指针，直到不符合条件，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">while</span>(right&lt;a.length)&#123;</div><div class="line">	<span class="keyword">do</span> something;</div><div class="line">    <span class="keyword">while</span>(satisfity the condition)&#123;</div><div class="line">		move left point until it unsatisfied;</div><div class="line">    &#125;</div><div class="line">    move right;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Longest-Mountain-in-Array（845）"><a href="#Longest-Mountain-in-Array（845）" class="headerlink" title="Longest Mountain in Array（845）"></a>Longest Mountain in Array（845）</h2><p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: [2,1,4,7,3,2,5]</div><div class="line">Output: 5</div><div class="line">Explanation: The largest mountain is [1,4,7,3,2] which has length 5.</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestMountain</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n=A.length;</div><div class="line">        <span class="keyword">if</span>(n&lt;<span class="number">3</span>)<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> left=<span class="number">0</span>;<span class="keyword">int</span> right;<span class="keyword">int</span> max=<span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span>(left&lt;n-<span class="number">2</span>)&#123;</div><div class="line">            <span class="comment">//skip decending and equal array</span></div><div class="line">            <span class="keyword">while</span>(left&lt;n-<span class="number">1</span> &amp;&amp; A[left]&gt;=A[left+<span class="number">1</span>])&#123;</div><div class="line">                left++;</div><div class="line">            &#125;</div><div class="line">            right=left+<span class="number">1</span>;</div><div class="line">            <span class="comment">//mountain up</span></div><div class="line">            <span class="keyword">while</span>(right&lt;n-<span class="number">1</span> &amp;&amp; A[right]&lt;A[right+<span class="number">1</span>])&#123;</div><div class="line">                right++;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//mountain down</span></div><div class="line">            <span class="keyword">while</span>(right&lt;n-<span class="number">1</span> &amp;&amp; A[right]&gt;A[right+<span class="number">1</span>])&#123;</div><div class="line">                right++;</div><div class="line">                <span class="comment">//update the max value</span></div><div class="line">                max=Math.max(max,right-left+<span class="number">1</span>);</div><div class="line">            &#125;</div><div class="line">            left=right;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> max;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="209-Minimum-Size-Subarray-Sum"><a href="#209-Minimum-Size-Subarray-Sum" class="headerlink" title="209 Minimum Size Subarray Sum"></a>209 Minimum Size Subarray Sum</h2><p>Given an array of <strong>n</strong> positive integers and a positive integer <strong>s</strong>, find the minimal length of a <strong>contiguous</strong> subarray of which the sum ≥ <strong>s</strong>. If there isn’t one, return 0 instead.</p>
+<p><strong>Example:</strong> </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: s = 7, nums = [2,3,1,2,4,3]</div><div class="line">Output: 2</div><div class="line">Explanation: the subarray [4,3] has the minimal length under the problem constraint.</div></pre></td></tr></table></figure>
+<p><strong>Follow up:</strong></p>
+<p>If you have figured out the <em>O</em>(<em>n</em>) solution, try coding another solution of which the time complexity is <em>O</em>(<em>n</em> log <em>n</em>). </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minSubArrayLen</span><span class="params">(<span class="keyword">int</span> s, <span class="keyword">int</span>[] a)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(a==<span class="keyword">null</span>||a.length&lt;<span class="number">1</span>)<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> min=a.length+<span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span>(right&lt;a.length)&#123;</div><div class="line">        sum+=a[right];</div><div class="line">        <span class="keyword">while</span>(s&lt;=sum)&#123;</div><div class="line">            min=Math.min(min,right-left+<span class="number">1</span>);</div><div class="line">            sum-=a[left];</div><div class="line">            left++;</div><div class="line">        &#125;</div><div class="line">        right++;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> min==a.length+<span class="number">1</span>?<span class="number">0</span>:min;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="076-Minimum-Window-Substring"><a href="#076-Minimum-Window-Substring" class="headerlink" title="076 Minimum Window Substring"></a>076 Minimum Window Substring</h2><p>Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: S = &quot;ADOBECODEBANC&quot;, T = &quot;ABC&quot;</div><div class="line">Output: &quot;BANC&quot;</div></pre></td></tr></table></figure>
+<p><strong>Note:</strong></p>
+<ul>
+<li>If there is no such window in S that covers all characters in T, return the empty string <code>&quot;&quot;</code>.</li>
+<li>If there is such window, you are guaranteed that there will always be only one unique minimum window in S.</li>
+</ul>
+<p>S contain T all characters 意味着s中的字母包含t的字母并且每个字母对应的频次也要更大。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">minWindow</span><span class="params">(String s, String t)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || t == <span class="keyword">null</span> || s.length() &lt; t.length()) <span class="keyword">return</span> <span class="string">""</span>;</div><div class="line">    <span class="keyword">int</span>[] map=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>];</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">char</span> c:t.toCharArray())</div><div class="line">        map[c]++;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> slen=s.length(),tlen=t.length();</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> count=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> minLen=s.length()+<span class="number">1</span>; </div><div class="line">    <span class="keyword">int</span> minLeft=<span class="number">0</span>; <span class="comment">//min substring's start index</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> right=<span class="number">0</span>; right&lt;slen; right++)&#123;   <span class="comment">//move from left to right</span></div><div class="line">        <span class="keyword">char</span> rchar=s.charAt(right);</div><div class="line">        <span class="keyword">if</span>(--map[rchar]&gt;=<span class="number">0</span>)count++;</div><div class="line"></div><div class="line">        <span class="keyword">while</span>(count==tlen)&#123; </div><div class="line">            <span class="keyword">if</span>(right-left+<span class="number">1</span>&lt;minLen)&#123;</div><div class="line">                minLen=right-left+<span class="number">1</span>;</div><div class="line">                minLeft=left;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">char</span> lchar=s.charAt(left);</div><div class="line">            <span class="keyword">if</span>(++map[lchar]&gt;<span class="number">0</span>)count--; </div><div class="line">            left++; <span class="comment">//skip all redundance char and neverappear char</span></div><div class="line">        &#125;      </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> minLen==slen+<span class="number">1</span>?<span class="string">""</span>:s.substring(minLeft,minLeft+minLen);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="567-Permutation-in-String"><a href="#567-Permutation-in-String" class="headerlink" title="567 Permutation in String"></a>567 Permutation in String</h2><p>Given two strings </p>
+<p>s1</p>
+<p> and </p>
+<p>s2</p>
+<p>, write a function to return true if </p>
+<p>s2</p>
+<p> contains the permutation of </p>
+<p>s1</p>
+<p>. In other words, one of the first string’s permutations is the </p>
+<p>substring</p>
+<p> of the second string.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input:s1 = &quot;ab&quot; s2 = &quot;eidbaooo&quot;</div><div class="line">Output:True</div><div class="line">Explanation: s2 contains one permutation of s1 (&quot;ba&quot;).</div></pre></td></tr></table></figure>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input:s1= &quot;ab&quot; s2 = &quot;eidboaoo&quot;</div><div class="line">Output: False</div></pre></td></tr></table></figure>
+<p><strong>Note:</strong></p>
+<ol>
+<li>The input strings only contain lower case letters.</li>
+<li>The length of both given strings is in range [1, 10,000].</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkInclusion</span><span class="params">(String s1, String s2)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n=s1.length();</div><div class="line">    <span class="keyword">int</span> m=s2.length();</div><div class="line">    <span class="keyword">if</span>(m&lt;n)<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> right=<span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> count=n;</div><div class="line">    <span class="keyword">int</span>[] alp=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</div><div class="line">        alp[s1.charAt(i)-<span class="string">'a'</span>]++;    </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(right&lt;m)&#123;</div><div class="line">        <span class="keyword">if</span>(alp[s2.charAt(right++)-<span class="string">'a'</span>]--&gt;<span class="number">0</span>)count--; <span class="comment">//</span></div><div class="line">        <span class="keyword">while</span>(count==<span class="number">0</span>)&#123;</div><div class="line">            <span class="keyword">if</span>((right-left)==n)<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">            <span class="keyword">if</span>(alp[s2.charAt(left++)-<span class="string">'a'</span>]++==<span class="number">0</span>)count++;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="159-Longest-Substring-with-at-most-k-distinct-character"><a href="#159-Longest-Substring-with-at-most-k-distinct-character" class="headerlink" title="159 Longest Substring with at most k distinct character"></a>159 Longest Substring with at most k distinct character</h2><p>This is a problem asked by Google.</p>
+<p>Given a string, find the longest substring that contains only two unique characters. For example, given “abcbbbbcccbdddadacb”, the longest substring that contains 2 unique character is “bcbbbbcccb”.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstringKDistinct</span><span class="params">(String s, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span>(k==<span class="number">0</span> || s==<span class="keyword">null</span> || s.length()==<span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span>(s.length()&lt;k)</div><div class="line">        <span class="keyword">return</span> s.length();</div><div class="line"> </div><div class="line">    HashMap&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Character, Integer&gt;();</div><div class="line"> </div><div class="line">    <span class="keyword">int</span> maxLen=k;</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;s.length(); i++)&#123;</div><div class="line">        <span class="keyword">char</span> c = s.charAt(i);</div><div class="line">        <span class="keyword">if</span>(map.containsKey(c))&#123;</div><div class="line">            map.put(c, map.get(c)+<span class="number">1</span>);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            map.put(c, <span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span>(map.size()&gt;k)&#123;</div><div class="line">            maxLen=Math.max(maxLen, i-left);</div><div class="line"> </div><div class="line">            <span class="keyword">while</span>(map.size()&gt;k)&#123;</div><div class="line"> </div><div class="line">                <span class="keyword">char</span> fc = s.charAt(left);</div><div class="line">                <span class="keyword">if</span>(map.get(fc)==<span class="number">1</span>)&#123;</div><div class="line">                    map.remove(fc);</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    map.put(fc, map.get(fc)-<span class="number">1</span>);</div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                left++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    maxLen = Math.max(maxLen, s.length()-left);</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> maxLen;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<h2 id="Longest-Repeating-Character-Replacement-424"><a href="#Longest-Repeating-Character-Replacement-424" class="headerlink" title="Longest Repeating Character Replacement(424)"></a>Longest Repeating Character Replacement(424)</h2><p>Given a string that consists of only uppercase English letters, you can replace any letter in the string with another letter at most <em>k</em> times. Find the length of a longest substring containing all repeating letters you can get after performing the above operations.</p>
+<p><strong>Note:</strong><br>Both the string’s length and <em>k</em> will not exceed 104.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input:</div><div class="line">s = &quot;ABAB&quot;, k = 2</div><div class="line"></div><div class="line">Output:</div><div class="line">4</div><div class="line"></div><div class="line">Explanation:</div><div class="line">Replace the two &apos;A&apos;s with two &apos;B&apos;s or vice versa.</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">characterReplacement</span><span class="params">(String s, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> len = s.length();</div><div class="line">    <span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</div><div class="line">    <span class="keyword">int</span> start = <span class="number">0</span>, maxCount = <span class="number">0</span>, maxLength = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> end = <span class="number">0</span>; end &lt; len; end++) &#123;</div><div class="line">        maxCount = Math.max(maxCount, ++count[s.charAt(end) - <span class="string">'A'</span>]);</div><div class="line">        <span class="keyword">while</span> (end - start + <span class="number">1</span> - maxCount &gt; k) &#123;</div><div class="line">            count[s.charAt(start) - <span class="string">'A'</span>]--;</div><div class="line">            start++;</div><div class="line">        &#125;</div><div class="line">        maxLength = Math.max(maxLength, end - start + <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> maxLength;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Push-Dominoes（838）"><a href="#Push-Dominoes（838）" class="headerlink" title="Push Dominoes（838）"></a>Push Dominoes（838）</h2><p>多米诺骨牌</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: &quot;.L.R...LR..L..&quot;</div><div class="line">Output: &quot;LL.RR.LLRRLL..&quot;</div></pre></td></tr></table></figure>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Input: &quot;RR.L&quot;</div><div class="line">Output: &quot;RR.L&quot;</div><div class="line">Explanation: The first domino expends no additional force on the second domino.</div></pre></td></tr></table></figure>
+<p>有一次提交，因为没有把system.out删除掉而发生超时。这种问题只需要把所有情况都考虑进去就行，连续提交了4次失败，第一次逻辑有问题，在循环体直接用（left+right)/2 表示mid，但是left一直在变，第二次，没有考虑到R….结尾的情况，第三次，没有加入left&lt;n条件，第四次没有去掉System.out。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">pushDominoes</span><span class="params">(String d)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n=d.length();</div><div class="line">    <span class="keyword">if</span>(d==<span class="keyword">null</span>||n&lt;=<span class="number">1</span>)<span class="keyword">return</span> d;</div><div class="line">    <span class="keyword">int</span> left=<span class="number">0</span>,right=<span class="number">0</span>;</div><div class="line">    <span class="keyword">char</span>[] res=d.toCharArray();</div><div class="line"></div><div class="line">    <span class="keyword">while</span>(right&lt;n)&#123;</div><div class="line">        <span class="keyword">char</span> cur=res[right];</div><div class="line">        <span class="keyword">if</span>(cur==<span class="string">'.'</span>)&#123;</div><div class="line">            right++;</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(cur==<span class="string">'L'</span>)&#123;</div><div class="line">            <span class="comment">//L...L</span></div><div class="line">            <span class="keyword">if</span>(res[left]==<span class="string">'.'</span>||res[left]==<span class="string">'L'</span>)&#123;</div><div class="line">                <span class="keyword">while</span>(left&lt;right)res[left++]=<span class="string">'L'</span>;</div><div class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(res[left]==<span class="string">'R'</span>)&#123;</div><div class="line">                <span class="comment">//R...L</span></div><div class="line">                <span class="keyword">int</span> mid=(left+right)/<span class="number">2</span>;</div><div class="line">                <span class="keyword">if</span>((right-left)%<span class="number">2</span>!=<span class="number">0</span>)&#123;  <span class="comment">//even '.' among left and right</span></div><div class="line">                    <span class="keyword">while</span>(left&lt;=mid)res[left++]=<span class="string">'R'</span>;</div><div class="line">                    <span class="keyword">while</span>(left&lt;right)res[left++]=<span class="string">'L'</span>;</div><div class="line">                &#125;<span class="keyword">else</span>&#123;                  <span class="comment">//odd '.' among left and right</span></div><div class="line">                    <span class="keyword">while</span>(left&lt;mid)res[left++]=<span class="string">'R'</span>;</div><div class="line">                    left++;</div><div class="line">                    <span class="keyword">while</span>(left&lt;right)res[left++]=<span class="string">'L'</span>;</div><div class="line">                &#125; </div><div class="line">            &#125;</div><div class="line">            right++;</div><div class="line">            left++;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="comment">// R...R</span></div><div class="line">            <span class="keyword">if</span>(res[left]==<span class="string">'R'</span>)&#123;</div><div class="line">                <span class="keyword">while</span>(left&lt;right)res[left++]=<span class="string">'R'</span>;</div><div class="line">                right++;</div><div class="line">            &#125;<span class="keyword">else</span>&#123;   <span class="comment">//L...R</span></div><div class="line">                left=right;</div><div class="line">                right++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(left&lt;n &amp;&amp; res[left]==<span class="string">'R'</span>)&#123;</div><div class="line">        <span class="keyword">while</span>(left&lt;n)res[left++]=<span class="string">'R'</span>;</div><div class="line">    &#125;</div><div class="line">    String res1=<span class="keyword">new</span> String(res);</div><div class="line">    <span class="keyword">return</span> res1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Alogrithm/" rel="tag"># Alogrithm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/15/NexT主题配置/" rel="next" title="NexT主题配置">
+                <i class="fa fa-chevron-left"></i> NexT主题配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/28/LeetCode480/" rel="prev" title="LeetCode 480">
+                LeetCode 480 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/photo.jpg"
+               alt="侯胜滔" />
+          <p class="site-author-name" itemprop="name">侯胜滔</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/profile.php?id=100011226155573" target="_blank" title="facebook">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/shengtao_hou" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#N-Sum"><span class="nav-number">1.</span> <span class="nav-text">N Sum</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#001-Two-Sum"><span class="nav-number">1.1.</span> <span class="nav-text">001 Two Sum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#167-Two-Sum-II-sorted"><span class="nav-number">1.2.</span> <span class="nav-text">167 Two Sum II - sorted</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#015-3Sum"><span class="nav-number">1.3.</span> <span class="nav-text">015 3Sum</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#左右指针问题"><span class="nav-number">2.</span> <span class="nav-text">左右指针问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#011-Container-With-Most-Water"><span class="nav-number">2.1.</span> <span class="nav-text">011 Container With Most Water</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#042-Trapping-Rain-Water"><span class="nav-number">2.2.</span> <span class="nav-text">042 Trapping Rain Water</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链表双指针"><span class="nav-number">3.</span> <span class="nav-text">链表双指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#019-Remove-Nth-Node-From-End-of-List"><span class="nav-number">3.1.</span> <span class="nav-text">019 Remove Nth Node From End of List</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#061-Rotate-List"><span class="nav-number">3.2.</span> <span class="nav-text">061 Rotate List</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#杂"><span class="nav-number">4.</span> <span class="nav-text">杂</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#075-Sort-Colors"><span class="nav-number">4.1.</span> <span class="nav-text">075 Sort Colors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#524-Longest-Word-in-Dictionary-through-Deleting"><span class="nav-number">4.2.</span> <span class="nav-text">524 Longest Word in Dictionary through Deleting</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#双左指针求最小子串问题"><span class="nav-number">5.</span> <span class="nav-text">双左指针求最小子串问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Longest-Mountain-in-Array（845）"><span class="nav-number">5.1.</span> <span class="nav-text">Longest Mountain in Array（845）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#209-Minimum-Size-Subarray-Sum"><span class="nav-number">5.2.</span> <span class="nav-text">209 Minimum Size Subarray Sum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#076-Minimum-Window-Substring"><span class="nav-number">5.3.</span> <span class="nav-text">076 Minimum Window Substring</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#567-Permutation-in-String"><span class="nav-number">5.4.</span> <span class="nav-text">567 Permutation in String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#159-Longest-Substring-with-at-most-k-distinct-character"><span class="nav-number">5.5.</span> <span class="nav-text">159 Longest Substring with at most k distinct character</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Longest-Repeating-Character-Replacement-424"><span class="nav-number">5.6.</span> <span class="nav-text">Longest Repeating Character Replacement(424)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Push-Dominoes（838）"><span class="nav-number">5.7.</span> <span class="nav-text">Push Dominoes（838）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+	  <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯胜滔</span>
+</div>
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+本站总访问量 <span id="busuanzi_value_site_pv"></span> &nbsp&nbsp&nbsp
+您是第<span id="busuanzi_value_site_uv"></span>个来到的小伙伴
+
+
+
+         
+
+        
+      </div>
+	  
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
