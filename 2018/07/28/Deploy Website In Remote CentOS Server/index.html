@@ -88,13 +88,13 @@
 <meta name="description" content="SSH login to the serveropen shell and type: ssh root@ipaddress input root password Install JavaInstall OpenJDK 8 JRETo install OpenJDK 8 JRE using yum, run this command: sudo yum install java-1.8.0-op">
 <meta name="keywords" content="Back-end,CentOS">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Deploy a Website In Remote CentOS Server">
-<meta property="og:url" content="http://ShengtaoHou.github.io/2018/06/28/Deploy a Website In Remote CentOS Server/index.html">
+<meta property="og:title" content="Deploy Website In Remote CentOS Server">
+<meta property="og:url" content="http://ShengtaoHou.github.io/2018/07/28/Deploy Website In Remote CentOS Server/index.html">
 <meta property="og:site_name" content="Shengtao">
 <meta property="og:description" content="SSH login to the serveropen shell and type: ssh root@ipaddress input root password Install JavaInstall OpenJDK 8 JRETo install OpenJDK 8 JRE using yum, run this command: sudo yum install java-1.8.0-op">
-<meta property="og:updated_time" content="2018-09-11T21:00:07.253Z">
+<meta property="og:updated_time" content="2018-09-11T22:02:52.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Deploy a Website In Remote CentOS Server">
+<meta name="twitter:title" content="Deploy Website In Remote CentOS Server">
 <meta name="twitter:description" content="SSH login to the serveropen shell and type: ssh root@ipaddress input root password Install JavaInstall OpenJDK 8 JRETo install OpenJDK 8 JRE using yum, run this command: sudo yum install java-1.8.0-op">
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://ShengtaoHou.github.io/2018/06/28/Deploy a Website In Remote CentOS Server/"/>
+  <link rel="canonical" href="http://ShengtaoHou.github.io/2018/07/28/Deploy Website In Remote CentOS Server/"/>
 
 
 
 
 
-  <title> Deploy a Website In Remote CentOS Server | Shengtao </title>
+  <title> Deploy Website In Remote CentOS Server | Shengtao </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -262,7 +262,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://ShengtaoHou.github.io/2018/06/28/Deploy a Website In Remote CentOS Server/">
+  <link itemprop="mainEntityOfPage" href="http://ShengtaoHou.github.io/2018/07/28/Deploy Website In Remote CentOS Server/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Shengtao Hou">
@@ -286,7 +286,7 @@
             
             
               
-                Deploy a Website In Remote CentOS Server
+                Deploy Website In Remote CentOS Server
               
             
           </h1>
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-28T16:45:00-07:00">
-                2018-06-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-28T16:45:00-07:00">
+                2018-07-28
               </time>
             
 
@@ -376,8 +376,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat</div></pre></td></tr></table></figure>
 <p>The options used in the above command perform the following:</p>
 <p>-s /bin/false will disable shell access -g tomcat will assign a new user to the group tomcat -d /opt/tomcat will define the home directory for the user</p>
-<p>##Downloading and Installing Apache Tomcat</p>
-<p>change your current directory to directory /opt/</p>
+<h2 id="Downloading-and-Installing-Apache-Tomcat"><a href="#Downloading-and-Installing-Apache-Tomcat" class="headerlink" title="Downloading and Installing Apache Tomcat"></a>Downloading and Installing Apache Tomcat</h2><p>change your current directory to directory /opt/</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd /opt/</div></pre></td></tr></table></figure>
 <p>Iinstalled wget command on your system</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">yum install wget</div></pre></td></tr></table></figure>
@@ -389,8 +388,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">mv apache-tomcat-9.0.11/* tomcat/</div></pre></td></tr></table></figure>
 <p> Change the proper ownership using the following command:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">chown -hR tomcat:tomcat tomcat</div></pre></td></tr></table></figure>
-<p>##Testing Tomcat(optinal)</p>
-<p>We recommend you to run a short testing on Tomcat to make sure that there is no error and it is installed successfully so follow the below-given process.</p>
+<h2 id="Testing-Tomcat-optinal"><a href="#Testing-Tomcat-optinal" class="headerlink" title="Testing Tomcat(optinal)"></a>Testing Tomcat(optinal)</h2><p>We recommend you to run a short testing on Tomcat to make sure that there is no error and it is installed successfully so follow the below-given process.</p>
 <p>Run below given command :</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd /opt/tomcat/bin/</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">./startup.sh</div></pre></td></tr></table></figure>
@@ -399,8 +397,7 @@
 <p>You can check this using a web browser with <a href="http://yourserver_IP:8080" target="_blank" rel="external">http://yourserver_IP:8080</a> then you’ll see the homepage of Apache Tomcat Server but we recommend you to use browser later at final testing because we will run Tomcat with a systemd service file in the final configuration.</p>
 <p>Now run following commands :</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd /opt/tomcat/bin/</div><div class="line">./shutdown.sh</div><div class="line">chown -hR tomcat:tomcat /opt/tomcat/</div></pre></td></tr></table></figure>
-<p>##Creating a systemd Service File</p>
-<p>Now you’ll need to create a systemd service file to run Apache Tomcat as a tomcat user. Creation of a systemd service file is recommended for easy starting and stopping the service.</p>
+<h2 id="Creating-a-systemd-Service-File"><a href="#Creating-a-systemd-Service-File" class="headerlink" title="Creating a systemd Service File"></a>Creating a systemd Service File</h2><p>Now you’ll need to create a systemd service file to run Apache Tomcat as a tomcat user. Creation of a systemd service file is recommended for easy starting and stopping the service.</p>
 <p>Run following command :</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">nano /etc/systemd/system/tomcat.service</div></pre></td></tr></table></figure>
 <p>Add the content below into nano text editor, you can simply copy/paste this into the file:</p>
@@ -413,8 +410,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">netstat -plntu</div></pre></td></tr></table></figure>
 <p>Now run the command below and make sure that service is active as shown below:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">systemctl status tomcat</div></pre></td></tr></table></figure>
-<p>##Configure Tomcat Users</p>
-<p>Run following command to edit tomcat-users.xml file using any text editor here we are using nano :</p>
+<h2 id="Configure-Tomcat-Users"><a href="#Configure-Tomcat-Users" class="headerlink" title="Configure Tomcat Users"></a>Configure Tomcat Users</h2><p>Run following command to edit tomcat-users.xml file using any text editor here we are using nano :</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cd /opt/tomcat/conf/</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">nano tomcat-users.xml</div></pre></td></tr></table></figure>
 <p>Create a new line under line 43 and add following content, again you can simply copy-paste this into file like you’ve done before:</p>
@@ -432,8 +428,7 @@
 <p>Save the file and exit nano text editor .</p>
 <p>Now you’ll have to restart the tomcat and to do so run following command:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">systemctl restart tomcat</div></pre></td></tr></table></figure>
-<p>##Configure Firewalld</p>
-<p>If in any case you haven’t installed firewalld on your system then install it first using yum command as shown below:</p>
+<h2 id="Configure-Firewalld"><a href="#Configure-Firewalld" class="headerlink" title="Configure Firewalld"></a>Configure Firewalld</h2><p>If in any case you haven’t installed firewalld on your system then install it first using yum command as shown below:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">yum install firewalld</div></pre></td></tr></table></figure>
 <p>You’ll have to start firewalld and add it to start at boot time, to do so run following command:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">systemctl start firewalld</div><div class="line">systemctl enable firewalld</div></pre></td></tr></table></figure>
@@ -480,7 +475,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/28/Set Up SSM Development Environment/" rel="next" title="Set Up SSM Development Environment">
+              <a href="/2017/07/28/Set Up SSM Development Environment/" rel="next" title="Set Up SSM Development Environment">
                 <i class="fa fa-chevron-left"></i> Set Up SSM Development Environment
               </a>
             
@@ -641,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH-login-to-the-server"><span class="nav-number">1.</span> <span class="nav-text">SSH login to the server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Java"><span class="nav-number">2.</span> <span class="nav-text">Install Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JRE"><span class="nav-number">2.1.</span> <span class="nav-text">Install OpenJDK 8 JRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JDK"><span class="nav-number">2.2.</span> <span class="nav-text">Install OpenJDK 8 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Access"><span class="nav-number">2.3.</span> <span class="nav-text">Web Access</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH-login-to-the-server"><span class="nav-number">1.</span> <span class="nav-text">SSH login to the server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Java"><span class="nav-number">2.</span> <span class="nav-text">Install Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JRE"><span class="nav-number">2.1.</span> <span class="nav-text">Install OpenJDK 8 JRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JDK"><span class="nav-number">2.2.</span> <span class="nav-text">Install OpenJDK 8 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Downloading-and-Installing-Apache-Tomcat"><span class="nav-number">2.3.</span> <span class="nav-text">Downloading and Installing Apache Tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Testing-Tomcat-optinal"><span class="nav-number">2.4.</span> <span class="nav-text">Testing Tomcat(optinal)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-a-systemd-Service-File"><span class="nav-number">2.5.</span> <span class="nav-text">Creating a systemd Service File</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Tomcat-Users"><span class="nav-number">2.6.</span> <span class="nav-text">Configure Tomcat Users</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Firewalld"><span class="nav-number">2.7.</span> <span class="nav-text">Configure Firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Access"><span class="nav-number">2.8.</span> <span class="nav-text">Web Access</span></a></li></ol></li></ol></div>
             
 
           </div>
