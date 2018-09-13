@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://ShengtaoHou.github.io/2018/07/28/Deploy Website In Remote CentOS Server/index.html">
 <meta property="og:site_name" content="Shengtao">
 <meta property="og:description" content="SSH login to the serveropen shell and type: ssh root@ipaddress input root password Install JavaInstall OpenJDK 8 JRETo install OpenJDK 8 JRE using yum, run this command: sudo yum install java-1.8.0-op">
-<meta property="og:updated_time" content="2018-09-11T22:02:52.896Z">
+<meta property="og:updated_time" content="2018-09-11T22:05:33.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Deploy Website In Remote CentOS Server">
 <meta name="twitter:description" content="SSH login to the serveropen shell and type: ssh root@ipaddress input root password Install JavaInstall OpenJDK 8 JRETo install OpenJDK 8 JRE using yum, run this command: sudo yum install java-1.8.0-op">
@@ -370,8 +370,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo yum install java-1.8.0-openjdk-devel</div></pre></td></tr></table></figure>
 <p>At the confirmation prompt, enter <code>y</code> then <code>RETURN</code> to continue with the installation.</p>
 <p>Congratulations! You have installed OpenJDK 8 JDK.</p>
-<p>#Installing Apache Tomcat 9</p>
-<p>We’ll have to create a system user and group before proceeding with the installation process of Tomcat so create a user and group named tomcat to run below-given command to do so:</p>
+<h1 id="Installing-Apache-Tomcat-9"><a href="#Installing-Apache-Tomcat-9" class="headerlink" title="Installing Apache Tomcat 9"></a>Installing Apache Tomcat 9</h1><p>We’ll have to create a system user and group before proceeding with the installation process of Tomcat so create a user and group named tomcat to run below-given command to do so:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">groupadd tomcat</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat</div></pre></td></tr></table></figure>
 <p>The options used in the above command perform the following:</p>
@@ -485,8 +484,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/09/User Analysis System - Demo/" rel="prev" title="User Analysis System - Demo">
-                User Analysis System - Demo <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/09/Gaokao Forum - Demo/" rel="prev" title="Gaokao Forum - Demo">
+                Gaokao Forum - Demo <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -636,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH-login-to-the-server"><span class="nav-number">1.</span> <span class="nav-text">SSH login to the server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Java"><span class="nav-number">2.</span> <span class="nav-text">Install Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JRE"><span class="nav-number">2.1.</span> <span class="nav-text">Install OpenJDK 8 JRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JDK"><span class="nav-number">2.2.</span> <span class="nav-text">Install OpenJDK 8 JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Downloading-and-Installing-Apache-Tomcat"><span class="nav-number">2.3.</span> <span class="nav-text">Downloading and Installing Apache Tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Testing-Tomcat-optinal"><span class="nav-number">2.4.</span> <span class="nav-text">Testing Tomcat(optinal)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-a-systemd-Service-File"><span class="nav-number">2.5.</span> <span class="nav-text">Creating a systemd Service File</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Tomcat-Users"><span class="nav-number">2.6.</span> <span class="nav-text">Configure Tomcat Users</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Firewalld"><span class="nav-number">2.7.</span> <span class="nav-text">Configure Firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Access"><span class="nav-number">2.8.</span> <span class="nav-text">Web Access</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SSH-login-to-the-server"><span class="nav-number">1.</span> <span class="nav-text">SSH login to the server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Install-Java"><span class="nav-number">2.</span> <span class="nav-text">Install Java</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JRE"><span class="nav-number">2.1.</span> <span class="nav-text">Install OpenJDK 8 JRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Install-OpenJDK-8-JDK"><span class="nav-number">2.2.</span> <span class="nav-text">Install OpenJDK 8 JDK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Installing-Apache-Tomcat-9"><span class="nav-number">3.</span> <span class="nav-text">Installing Apache Tomcat 9</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Downloading-and-Installing-Apache-Tomcat"><span class="nav-number">3.1.</span> <span class="nav-text">Downloading and Installing Apache Tomcat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Testing-Tomcat-optinal"><span class="nav-number">3.2.</span> <span class="nav-text">Testing Tomcat(optinal)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Creating-a-systemd-Service-File"><span class="nav-number">3.3.</span> <span class="nav-text">Creating a systemd Service File</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Tomcat-Users"><span class="nav-number">3.4.</span> <span class="nav-text">Configure Tomcat Users</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configure-Firewalld"><span class="nav-number">3.5.</span> <span class="nav-text">Configure Firewalld</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web-Access"><span class="nav-number">3.6.</span> <span class="nav-text">Web Access</span></a></li></ol></li></ol></div>
             
 
           </div>
