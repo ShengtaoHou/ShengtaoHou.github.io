@@ -242,6 +242,16 @@
           </a>
         </li>
       
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
 
       
     </ul>
@@ -342,6 +352,13 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2018/09/09/Gaokao Forum - Demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/09/Gaokao Forum - Demo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -418,8 +435,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/28/Deploy Website In Remote CentOS Server/" rel="next" title="Deploy Website In Remote CentOS Server">
-                <i class="fa fa-chevron-left"></i> Deploy Website In Remote CentOS Server
+              <a href="/2018/09/09/User Analysis System - Demo/" rel="next" title="User Analysis System - Demo">
+                <i class="fa fa-chevron-left"></i> User Analysis System - Demo
               </a>
             
           </div>
@@ -427,10 +444,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/09/User Analysis System - Demo/" rel="prev" title="User Analysis System - Demo">
-                User Analysis System - Demo <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -455,6 +468,13 @@
 
           
   <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
     
   </div>
 
@@ -704,10 +724,35 @@
 
   
 
+    <script type="text/javascript">
+      var disqus_shortname = 'shengtaohou';
+      var disqus_identifier = '2018/09/09/Gaokao Forum - Demo/';
+
+      var disqus_title = "Gaokao Forum - Demo";
 
 
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
 
-	
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
 
 
 
